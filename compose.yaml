@@ -9,17 +9,25 @@
 # https://github.com/docker/awesome-compose
 services:
   frontend:
-    build: ./Frontend
+    build: ./frontend
     ports:
       - "3500:80"
+    networks:
+      - dockerNetwork
+    depends_on:
+      - backend
   backend:
-    build: ./Backend
+    build: ./backend
     ports:
-      - "9000:9000"
+      - "8500:9000"
+    networks:
+      - dockerNetwork
       
   Mongodb:
     image: mongo
     container_name: Mongodb
+    networks:
+      - dockerNetwork
 
   Express:
     image: mongo-express
@@ -31,6 +39,13 @@ services:
       ME_CONFIG_MONGODB_PORT: 27017
       ME_CONFIG_BASICAUTH_USERNAME: admin
       ME_CONFIG_BASICAUTH_PASSWORD: admin
+    networks:
+      - dockerNetwork
+networks:
+  dockerNetwork:
+    driver: bridge  
+    
+    
     
 
 

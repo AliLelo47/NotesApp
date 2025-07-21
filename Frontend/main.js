@@ -2,10 +2,9 @@ var Title = document.getElementById("notestitle");
 var Content = document.getElementById("notescontent");
 
 
-
 document.getElementById("AddNoteButton").addEventListener("click", SaveData);
 async function SaveData () {
-        var response = await fetch("http://127.0.0.1:9000/AddNote", {
+        var response = await fetch("/AddNote", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -20,7 +19,7 @@ async function SaveData () {
 
 document.getElementById("DeleteNoteButton").addEventListener("click", DeleteNote);
 async function DeleteNote() {
-        var response = await fetch("http://127.0.0.1:9000/DeleteNote", {
+        var response = await fetch("/DeleteNote", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
