@@ -31,8 +31,6 @@ my_app.add_middleware(
 
 
 
-
-
 # Create a new MongoDB client using the URI above
 client = MongoClient("mongodb://Mongodb:27017/")
 
@@ -43,19 +41,14 @@ mycol = mydb["Notes"]
 
 
 
-
-
-
-# Define a route for the root URL ('/')
-# When a GET request is made to '/', this function runs
-@my_app.get("/")
-async def root():
-    # Return a simple JSON response
-    return {"message": "Hello World"}
-
-
-
-
+@my_app.get("/ViewNote")
+async def ViewNote():
+    notes = []
+    for note in mycol.find():
+        # Convert MongoDB document to JSON-serializable dict
+        note["_id"] = str(note["_id"])  # Convert ObjectId to string
+        notes.append(note)
+    return notes
 
 
 
@@ -75,8 +68,10 @@ async def recieveNote(request: Request):
 
 
 
+
 @my_app.delete("/DeleteNote")
 async def deleteNote(request: Request):
     data = await request.json()
     mycol.delete_one(data)
     return {"message": "Note deleted successfully"}
+
