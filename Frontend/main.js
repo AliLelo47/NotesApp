@@ -36,6 +36,7 @@ async function DeleteNote() {
       });
         var result = await response.json();
       document.getElementById("response").innerText = result.message;
+      ViewData()
 };
 
 
