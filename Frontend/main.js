@@ -1,7 +1,7 @@
 var Title = document.getElementById("notestitle");
 var Content = document.getElementById("notescontent");
-
-
+let ClassCount = 0;
+let NewCount = ClassCount.toString();
 
 
 
@@ -25,21 +25,6 @@ async function SaveData () {
 
 
 
-document.getElementById("DeleteNoteButton").addEventListener("click", DeleteNote);
-async function DeleteNote() {
-        var response = await fetch("/DeleteNote", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ title: Title.value, content: Content.value})
-      });
-        var result = await response.json();
-      document.getElementById("response").innerText = result.message;
-      ViewData()
-};
-
-
 
 
 
@@ -48,12 +33,13 @@ async function DeleteNote() {
 document.getElementById("ViewNoteButton").addEventListener("click", ViewData);
 async function ViewData () {
 
+      
 
-      var response = await fetch("/ViewNote", {
+      let response = await fetch("/ViewNote", {
         method: "GET"
       });
 
-      var notebook = document.getElementById("NoteBook");
+      let notebook = document.getElementById("NoteBook");
 
       notebook.innerHTML = ""
 
@@ -61,16 +47,45 @@ async function ViewData () {
 
       console.log('Type:', typeof notes);
       JSON.stringify(notes)
+      
       notes.forEach(note => {
 
         const NewNote = document.createElement("div")
         NewNote.className = "NewNote";
         NewNote.innerHTML = `
-        <h3>Title: ${note.title}</h3>
-        <h3>Note: </h3>
+        <h3  id="${NewCount}">Title: ${note.title}</h3>
+        <title>Note</title>
         <p>${note.content}</p>
+        <button class="${NewCount} DeleteButton">Delete Note</button>
         `
         notebook.append(NewNote)
 
+        ClassCount = ClassCount + 1;
+
       });
+};
+
+
+
+
+
+
+document.getElementById("NoteBook").addEventListener("click", function(e){
+  if (e.target.classList.contains("DeleteButton")){
+    DeleteNote(e);  
+  };
+});
+
+async function DeleteNote() {
+        let DeleteId = document.getElementById(`${NewCount}`);
+        let response = await fetch("/DeleteNote", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({title: DeleteId.value})
+      });
+        var result = await response.json();
+      document.getElementById("response").innerText = result.message;
+      ViewData()
 };
