@@ -45,7 +45,7 @@ USER appuser
 COPY . .
 
 # Expose the port that the application listens on.
-EXPOSE 9000
+EXPOSE 5000
 
 # Run the application.
-CMD ["uvicorn", "api:my_app", "--host=0.0.0.0", "--port=9000"]
+CMD ["uvicorn", "api:my_app", "--host=0.0.0.0", "--port=5000"]

@@ -1,7 +1,8 @@
 var Title = document.getElementById("notestitle");
 var Content = document.getElementById("notescontent");
 let ClassCount = 0;
-let NewCount = ClassCount.toString();
+let NoteCount = ClassCount.toString();
+
 
 
 
@@ -53,10 +54,10 @@ async function ViewData () {
         const NewNote = document.createElement("div")
         NewNote.className = "NewNote";
         NewNote.innerHTML = `
-        <h3  id="${NewCount}">Title: ${note.title}</h3>
+        <h3  id="${NoteCount}">Title: ${note.title}</h3>
         <title>Note</title>
         <p>${note.content}</p>
-        <button class="${NewCount} DeleteButton">Delete Note</button>
+        <button class="${NoteCount} DeleteButton">Delete Note</button>
         `
         notebook.append(NewNote)
 
@@ -70,6 +71,36 @@ async function ViewData () {
 
 
 
+
+
+
+document.getElementById("AddNoteButton").addEventListener("click", SaveData);
+async function SaveData () {
+        var response = await fetch("/AddNote", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ title: Title.value, content: Content.value})
+      });
+      var result = await response.json();
+      document.getElementById("response").innerText = result.message;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 document.getElementById("NoteBook").addEventListener("click", function(e){
   if (e.target.classList.contains("DeleteButton")){
     DeleteNote(e);  
@@ -77,7 +108,7 @@ document.getElementById("NoteBook").addEventListener("click", function(e){
 });
 
 async function DeleteNote() {
-        let DeleteId = document.getElementById(`${NewCount}`);
+        let DeleteId = document.getElementById(`${NoteCount}`);
         let response = await fetch("/DeleteNote", {
         method: "DELETE",
         headers: {
