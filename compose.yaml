@@ -12,6 +12,9 @@ services:
     build: ./frontend
     ports:
       - "80:80"
+      - "443:443"  # Add HTTPS port
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     networks:
       - dockerNetwork
     depends_on:
